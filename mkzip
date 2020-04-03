@@ -1,0 +1,13 @@
+#! /bin/bash
+
+files=$(git ls-files *.js *.json *.html images/*.png)
+dir=$(basename $(pwd))
+cd ..
+path_files=
+
+for f in $files
+do
+	path_files="$path_files $dir/$f"
+done
+
+zip $dir/$dir.zip $path_files

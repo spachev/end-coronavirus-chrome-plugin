@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>End Coronavirus Extractor Options</title>
+	<link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+</head>
+<script src="vue.js"></script>
+<script src="vuetify.js"></script>
+<script src="util.js"></script>
+</head>
+<body>
+<div id="app">
+	<v-app>
+		<v-content>
+			<v-row>
+			<template v-for="f in fields">
+				<v-col>
+					<v-text-field small :label="get_label(f)" v-model="info[f]"></v-text-field>
+				</v-col>
+			</template>
+			</v-row>
+			<v-row>
+				<v-col>
+					<v-btn @click="save()">Save</v-btn>
+				</v-col>
+				<v-col>
+					<v-btn @click="close()">Close</v-btn>
+				</v-col>
+			</v-row>
+		</v-content>
+	</v-app>
+</div>
+<script src="options.js">
+</script>
+</body>
+</html>

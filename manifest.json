@@ -1,0 +1,53 @@
+{
+	"manifest_version": 2,
+	"version": "0.1",
+	"name": "End Coronavirus Extractor",
+	"description": "Extract data from websites to paste into Google Sheets for EndCoronavirus.org project",
+	"content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+	"icons" :
+	{
+		"48" : "images/48.png",
+		"16" : "images/16.png",
+		"128" : "images/128.png"
+	},
+	"options_page" : "options.html",
+	"commands" : {
+		"mark-key" : {
+			"description" : "Mark Key",
+			"suggested_key": {
+				"default" : "Alt+K"
+			}
+		},
+		"mark-value" : {
+			"description" : "Mark Value",
+			"suggested_key": {
+				"default" : "Alt+V"
+			}
+		}
+	},
+	"background" :
+	{
+		"scripts" : ["util.js", "strtotime.js", "jquery.js",
+			"sheets-client.js", "data.js", "menu.js", "bg.js"]
+	},
+	"content_scripts" :
+	[
+		{
+			"matches" :
+			[
+				"https://*/*",
+				"http://*/*"
+			],
+			"js": ["util.js", "content.js"]
+		}
+	],
+	"permissions" :
+	[
+		"https://*/*",
+		"http://*/*",
+		"tabs",
+		"contextMenus",
+		"storage",
+		"identiy"
+	]
+}
