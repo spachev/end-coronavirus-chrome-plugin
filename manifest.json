@@ -1,6 +1,6 @@
 {
 	"manifest_version": 2,
-	"version": "0.1",
+	"version": "0.2",
 	"name": "End Coronavirus Extractor",
 	"description": "Extract data from websites to paste into Google Sheets for EndCoronavirus.org project",
 	"content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
@@ -23,7 +23,20 @@
 			"suggested_key": {
 				"default" : "Alt+V"
 			}
+		},
+		"next-value-column" : {
+			"description" : "Next Value Column",
+			"suggested_key": {
+				"default" : "Alt+N"
+			}
+		},
+		"prev-value-column" : {
+			"description" : "Previous Value Column",
+			"suggested_key": {
+				"default" : "Alt+P"
+			}
 		}
+
 	},
 	"background" :
 	{
@@ -47,7 +60,6 @@
 		"http://*/*",
 		"tabs",
 		"contextMenus",
-		"storage",
-		"identiy"
+		"storage"
 	]
 }

@@ -1,3 +1,5 @@
+const EXPIRES_SAFETY = 60;
+
 class Sheets_client
 {
 	constructor()
@@ -30,6 +32,28 @@ class Sheets_client
 		return OAUTH_PREFIX + "/" + path + "?" + this.build_req_payload(params);
 	}
 
+	refresh_access_token(cb)
+	{
+		let payload = this.build_req_payload(["client_id", "client_secret", "refresh_token"]) + "&grant_type=refresh_token";
+		let url = this.build_oauth_url([], "token");
+		let self = this;
+
+		$.ajax({
+			url: url,
+			data: payload,
+			type: 'post',
+			success: (rsp) => {
+				console.log("token refreshed", rsp);
+				self.access_token = rsp.access_token;
+				self.access_token_expires_ts = date_add(new Date(), rsp.expires_in - EXPIRES_SAFETY);
+				cb();
+			},
+			error: (err) => {
+				this.notify("Error refreshing access token");
+			}
+		});
+	}
+
 	build_req_payload(params)
 	{
 		let self = this;
@@ -52,6 +76,28 @@ class Sheets_client
 			this.val_col = opts.value_column;
 			this.update_key_val_low();
 		});
+	}
+
+	shift_val_col(offset)
+	{
+		get_option("value_column", (val_col) => {
+				if (!val_col)
+				{
+					this.notify("Value column is not set");
+					return;
+				}
+				let new_col = col_name_add(val_col, offset);
+				update_option("value_column", new_col , () => {
+					this.val_col = new_col;
+					this.notify("New value column is " + new_col);
+				});
+			}
+		);
+	}
+
+	set_sheet_by_url(url, cb)
+	{
+
 	}
 
 	update_key_val_low()
@@ -110,6 +156,7 @@ class Sheets_client
 					return;
 				this.access_token = rsp.access_token;
 				this.refresh_token = rsp.refresh_token;
+				this.access_token_expires_ts = date_add(new Date(), rsp.expires_in - EXPIRES_SAFETY);
 				this.notify("Authentication successful, ready to extract data");
 			},
 			error: (err) => {console.log("error got", err);}
@@ -133,6 +180,7 @@ class Sheets_client
 				cb(rsp.values.map(el => el[0]));
 			}, (err) => {
 				console.log("error fetching " + col_name, err);
+				this.notify("Could not fetch column " + col_name);
 			}
 		);
 	}
@@ -163,7 +211,14 @@ class Sheets_client
 				contentType: 'application/json',
 				dataType: 'json',
 			});
-		$.ajax(req);
+
+		if (new Date() < this.access_token_expires_ts)
+		{
+			$.ajax(req);
+			return;
+		}
+
+		this.refresh_access_token(() => $.ajax(req));
 	}
 
 }

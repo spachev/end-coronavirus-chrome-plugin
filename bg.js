@@ -49,6 +49,18 @@ function install_command_listener()
 				case "mark-value":
 					menu.handle_mark_value(null, tabs[0]);
 					break;
+				case "mark-key-column":
+					menu.handle_mark_key_column(null, tabs[0]);
+					break;
+				case "mark-value-column":
+					menu.handle_mark_value_column(null, tabs[0]);
+					break;
+				case "prev-value-column":
+					menu.handle_prev_value_column(null, tabs[0]);
+					break;
+				case "next-value-column":
+					menu.handle_next_value_column(null, tabs[0]);
+					break;
 			}
 		});
 	});
